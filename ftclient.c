@@ -3,8 +3,6 @@
 
 int sock_control;
 
-
-
 /**
  * Parse command in cstruct
  */
@@ -81,7 +79,7 @@ int ftclient_read_command(char* buf, int size, struct command *cstruct)
         strcat(buf, " ");
         strncat(buf, cstruct->arg, strlen(cstruct->arg));
     }
-
+    printf("%s\n", buf);
     return 0;
 }
 
@@ -338,9 +336,9 @@ int main(int argc, char* argv[])
                 ftclient_get(data_sock, sock_control, cmd.arg);
                 print_reply(read_reply(sock_control));
             }
-            else if(strcmp(cmd.code, "PUT")==0)
+            else if (strcmp(cmd.code, "PUT") == 0)
             {
-                
+
             }
             close(data_sock);
         }

@@ -286,10 +286,14 @@ int ftserve_recv_cmd(int sock_control, char*cmd, char*arg)
         return -1;
     }
 
-    strncpy(cmd, buffer, 5);
-    char *tmp = buffer + 6;
-    strcpy(arg, tmp);
-    printf("%s %s", cmd, arg);
+    //    strncpy(cmd, buffer, 4);
+    //    char *tmp = buffer + 5;
+    //    strcpy(arg, tmp);
+
+
+    strcpy(cmd,strtok(buffer, " "));
+    strcpy(arg,strtok(NULL, " "));
+    printf("in:%s %s\n", cmd, arg);
     if (strcmp(cmd, "QUIT") == 0)
     {
         rc = 221;
@@ -336,10 +340,10 @@ void ftserve_process(int sock_control)
     while (1)
     {
         // Wait for command
-//        printf("test");
+        //        printf("test");
         fflush(stdout);
         int rc = ftserve_recv_cmd(sock_control, cmd, arg);
-        printf("%s %s\n", cmd, arg);
+        printf("out:%s %s\n", cmd, arg);
 
         fflush(stdout);
 
@@ -365,6 +369,7 @@ void ftserve_process(int sock_control)
             else if (strcmp(cmd, "GET") == 0)
             { // Do get <filename>
                 ftserve_retr(sock_control, sock_data, arg);
+                printf("Sent\n");
             }
             else if (strcmp(cmd, "PUT") == 0)
             {
