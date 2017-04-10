@@ -336,12 +336,12 @@ void ftserve_process(int sock_control)
     while (1)
     {
         // Wait for command
-        printf("test");
-        fflush(stdin);
+//        printf("test");
+        fflush(stdout);
         int rc = ftserve_recv_cmd(sock_control, cmd, arg);
-        printf("aa%s %s", cmd, arg);
+        printf("%s %s\n", cmd, arg);
 
-        fflush(stdin);
+        fflush(stdout);
 
         if ((rc < 0) || (rc == 221))
         {
