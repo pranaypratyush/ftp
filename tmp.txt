@@ -1,0 +1,17 @@
+-rw-rw-r-- 1 pranay pranay  11713 Apr 10 07:25 CMakeCache.txt
+drwxrwxr-x 6 pranay pranay   4096 Apr 10 08:04 CMakeFiles
+-rw-rw-r-- 1 pranay pranay   1372 Apr 10 07:25 cmake_install.cmake
+-rw-rw-r-- 1 pranay pranay    166 Apr 10 07:25 CMakeLists.txt
+-rw-rw-r-- 1 pranay pranay   4583 Apr 10 07:44 common.c
+-rw-rw-r-- 1 pranay pranay   1809 Apr 10 07:44 common.h
+-rw-rw-r-- 1 pranay pranay    931 Apr 10 07:25 compile_commands.json
+-rwxrwxr-x 1 pranay pranay 115464 Apr 10 07:47 ftclient
+-rw-rw-r-- 1 pranay pranay   8656 Apr 10 07:47 ftclient.c
+-rw-rw-r-- 1 pranay pranay    991 Apr 10 07:43 ftclient.h
+-rwxrwxr-x 1 pranay pranay 115488 Apr 10 07:47 ftserv
+-rw-rw-r-- 1 pranay pranay   8144 Apr 10 07:47 ftserve.c
+-rw-rw-r-- 1 pranay pranay   1358 Apr 10 07:26 ftserve.h
+-rw-rw-r-- 1 pranay pranay 120331 Mar 20 01:47 gray.jpg
+-rw-rw-r-- 1 pranay pranay   6729 Apr 10 07:25 Makefile
+drwxrwxr-x 3 pranay pranay   4096 Apr 10 07:25 nbproject
+-rw-rw-r-- 1 pranay pranay      0 Apr 10 08:11 tmp.txt
