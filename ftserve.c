@@ -215,8 +215,8 @@ int ftserve_recv_cmd(int sock_control, char*cmd, char*arg)
     //    strcpy(arg, tmp);
 
 
-    strcpy(cmd,strtok(buffer, " "));
-    strcpy(arg,strtok(NULL, " "));
+    strcpy(cmd, strtok(buffer, " "));
+    strcpy(arg, strtok(NULL, " "));
     printf("in:%s %s\n", cmd, arg);
     if (strcmp(cmd, "QUIT") == 0)
     {
@@ -293,6 +293,7 @@ void ftserve_process(int sock_control)
             else if (strcmp(cmd, "GET") == 0)
             { // Do get <filename>
                 ftserve_retr(sock_control, sock_data, arg);
+                close(sock_data);
                 printf("Sent\n");
             }
             else if (strcmp(cmd, "PUT") == 0)
@@ -309,7 +310,7 @@ void ftserve_process(int sock_control)
                 // Close data connection
                 close(sock_data);
             }
-            else if(strcmp(cmd,"SCD")==0)
+            else if (strcmp(cmd, "SCD") == 0)
             {
                 chdir(arg);
             }
