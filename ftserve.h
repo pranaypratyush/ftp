@@ -18,14 +18,6 @@
 #include "common.h"
 
 
-/**
- * Send file specified in filename over data connection, sending
- * control message over control connection
- * Handles case of null or invalid filename
- */
-void ftserve_retr(int sock_control, int sock_data, char* filename);
-
-
 
 /**
  * Send list of files in current directory
@@ -35,14 +27,6 @@ void ftserve_retr(int sock_control, int sock_data, char* filename);
 int ftserve_list(int sock_data, int sock_control);
 
 
-
-
-/**
- * Open data connection to client 
- * Returns: socket for data connection
- * or -1 on error
- */
-int ftserve_start_data_conn(int sock_control);
 
 
 

@@ -85,7 +85,6 @@ void print_reply(int rc)
 
 }
 
-
 /**
  * Do get <filename> command 
  */
@@ -94,10 +93,12 @@ int ftclient_get(int data_sock, int sock_control, char* arg)
     char data[MAXSIZE];
     int size;
     FILE* fd = fopen(arg, "w");
-
+    int i = 0;
     while ((size = recv(data_sock, data, MAXSIZE, 0)) > 0)
     {
         fwrite(data, 1, size, fd);
+        i += size;
+        printf("%d\n", i);
     }
 
     if (size < 0)
@@ -222,4 +223,79 @@ void read_input(char* buffer, int size)
     }
 }
 
+/**
+ * Open data connection to client 
+ * Returns: socket for data connection
+ * or -1 on error
+ */
+int ftserve_start_data_conn(int sock_control)
+{
+    char buf[1024];
+    int wait, sock_data;
+
+    // Wait for go-ahead on control conn
+    if (recv(sock_control, &wait, sizeof wait, 0) < 0)
+    {
+        perror("Error while waiting");
+        return -1;
+    }
+
+    // Get client address
+    struct sockaddr_in client_addr;
+    socklen_t len = sizeof client_addr;
+    getpeername(sock_control, (struct sockaddr*) &client_addr, &len);
+    inet_ntop(AF_INET, &client_addr.sin_addr, buf, sizeof (buf));
+
+    // Initiate data connection with client
+    if ((sock_data = socket_connect(CLIENT_PORT_ID, buf)) < 0)
+        return -1;
+
+    return sock_data;
+}
+
+/**
+ * Send file specified in filename over data connection, sending
+ * control message over control connection
+ * Handles case of null or invalid filename
+ */
+void ftserve_retr(int sock_control, int sock_data, char* filename)
+{
+    FILE* fd = NULL;
+    char data[MAXSIZE];
+    size_t num_read;
+
+    fd = fopen(filename, "r");
+
+    if (!fd)
+    {
+        // send error code (550 Requested action not taken)
+        send_response(sock_control, 550);
+
+    }
+    else
+    {
+        // send okay (150 File status okay)
+        send_response(sock_control, 150);
+
+        do
+        {
+            num_read = fread(data, 1, MAXSIZE, fd);
+
+            if (num_read < 0)
+            {
+                printf("error in fread()\n");
+            }
+
+            // send block
+            if (send(sock_data, data, num_read, 0) < 0)
+                perror("error sending file\n");
+
+        } while (num_read > 0);
+
+        // send message: 226: closing conn, file transfer successful
+        send_response(sock_control, 226);
+
+        fclose(fd);
+    }
+}
 

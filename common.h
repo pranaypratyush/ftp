@@ -104,6 +104,24 @@ void print_reply (int rc);
  */
 int ftclient_get (int data_sock, int sock_control, char* arg);
 
+
+/**
+ * Open data connection to client 
+ * Returns: socket for data connection
+ * or -1 on error
+ */
+int ftserve_start_data_conn (int sock_control);
+
+
+/**
+ * Send file specified in filename over data connection, sending
+ * control message over control connection
+ * Handles case of null or invalid filename
+ */
+void ftserve_retr (int sock_control, int sock_data, char* filename);
+
+
+
 #endif
 
 

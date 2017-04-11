@@ -212,6 +212,8 @@ void ftclient_login()
     }
 }
 
+int ftserve_pwd(int sock_data, int sock_control);
+
 int main(int argc, char* argv[])
 {
     int data_sock, retcode, s;
@@ -338,7 +340,28 @@ int main(int argc, char* argv[])
             }
             else if (strcmp(cmd.code, "PUT") == 0)
             {
-
+                int sock_data;
+                if ((sock_data = ftserve_start_data_conn(sock_control)) < 0)
+                {
+                    close(sock_control);
+                    exit(1);
+                }
+                ftserve_retr(sock_control, sock_data, cmd.arg);
+                printf("Sent\n");
+            }
+            else if (strcmp(cmd.code, "SPWD") == 0)
+            {
+                int sock_data;
+                if ((sock_data = ftserve_start_data_conn(sock_control)) < 0)
+                {
+                    close(sock_control);
+                    exit(1);
+                }
+                ftserve_pwd(sock_data, sock_control);
+            }
+            else if (strcmp(cmd.code, "SCD") == 0)
+            {
+                ;
             }
             close(data_sock);
         }
@@ -347,6 +370,46 @@ int main(int argc, char* argv[])
 
     // Close the socket (control connection)
     close(sock_control);
+    return 0;
+}
+
+int ftserve_pwd(int sock_data, int sock_control)
+{
+    char data[MAXSIZE];
+    size_t num_read;
+    FILE* fd;
+
+    int rs = system("pwd > tmp.txt");
+    if (rs < 0)
+    {
+        exit(1);
+    }
+
+    fd = fopen("tmp.txt", "r");
+    if (!fd)
+    {
+        exit(1);
+    }
+
+    /* Seek to the beginning of the file */
+    fseek(fd, SEEK_SET, 0);
+
+    send_response(sock_control, 1); //starting
+
+    memset(data, 0, MAXSIZE);
+    while ((num_read = fread(data, 1, MAXSIZE, fd)) > 0)
+    {
+        if (send(sock_data, data, num_read, 0) < 0)
+        {
+            perror("err");
+        }
+        memset(data, 0, MAXSIZE);
+    }
+
+    fclose(fd);
+
+    send_response(sock_control, 226); // send 226
+
     return 0;
 }
 
